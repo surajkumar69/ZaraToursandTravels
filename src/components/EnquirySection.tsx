@@ -51,25 +51,25 @@ export default function EnquirySection() {
         </div>
 
         <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleWhatsApp}>
-          <div>
+          <div className="w-full min-w-0 max-w-full">
             <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-            <input type="text" name="name" required value={formData.name} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="John Doe" />
+            <input type="text" name="name" required value={formData.name} onChange={handleChange} className="w-full max-w-full box-border min-w-0 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="John Doe" />
           </div>
-          <div>
+          <div className="w-full min-w-0 max-w-full">
             <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-            <input type="tel" name="phone" required value={formData.phone} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="+91 00000 00000" />
+            <input type="tel" name="phone" required value={formData.phone} onChange={handleChange} className="w-full max-w-full box-border min-w-0 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="+91 00000 00000" />
           </div>
-          <div>
+          <div className="w-full min-w-0 max-w-full">
             <label className="block text-sm font-medium text-gray-700 mb-1">Travel Date</label>
-            <input type="date" name="date" required value={formData.date} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" />
+            <input type="date" name="date" required value={formData.date} onChange={handleChange} className="w-full max-w-full box-border min-w-0 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900 appearance-none" />
           </div>
-          <div>
+          <div className="w-full min-w-0 max-w-full">
             <label className="block text-sm font-medium text-gray-700 mb-1">Number of Passengers</label>
-            <input type="number" name="passengers" min="1" required value={formData.passengers} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="e.g. 4" />
+            <input type="number" name="passengers" min="1" required value={formData.passengers} onChange={handleChange} className="w-full max-w-full box-border min-w-0 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="e.g. 4" />
           </div>
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 w-full min-w-0 max-w-full">
             <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Type</label>
-            <select name="vehicle" required value={formData.vehicle} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900">
+            <select name="vehicle" required value={formData.vehicle} onChange={handleChange} className="w-full max-w-full box-border min-w-0 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900">
               <option value="">Select a vehicle</option>
               <option value="4-Seater Sedan">4-Seater Sedan</option>
               <option value="7-Seater Bolero">7-Seater Bolero</option>
@@ -80,23 +80,23 @@ export default function EnquirySection() {
               <option value="30-Seater Bus">30-Seater Bus</option>
             </select>
           </div>
-          <div>
+          <div className="w-full min-w-0 max-w-full">
             <label className="block text-sm font-medium text-gray-700 mb-1">Pickup Location</label>
-            <input type="text" name="pickup" required value={formData.pickup} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="e.g. Ooty Bus Stand / Coimbatore Airport" />
+            <input type="text" name="pickup" required value={formData.pickup} onChange={handleChange} className="w-full max-w-full box-border min-w-0 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="e.g. Ooty Bus Stand / Coimbatore Airport" />
           </div>
-          <div>
+          <div className="w-full min-w-0 max-w-full">
             <label className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
-            <input type="text" name="destination" required value={formData.destination} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="e.g. Coonoor Sightseeing" />
+            <input type="text" name="destination" required value={formData.destination} onChange={handleChange} className="w-full max-w-full box-border min-w-0 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="e.g. Coonoor Sightseeing" />
           </div>
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 w-full min-w-0 max-w-full">
             <label className="block text-sm font-medium text-gray-700 mb-1">Additional Message (Optional)</label>
-            <textarea name="message" rows={3} value={formData.message} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="Any specific requirements..."></textarea>
+            <textarea name="message" rows={3} value={formData.message} onChange={handleChange} className="w-full max-w-full box-border min-w-0 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900" placeholder="Any specific requirements..."></textarea>
           </div>
 
-          <div className="md:col-span-2 flex flex-col sm:flex-row gap-4 pt-4">
+          <div className="md:col-span-2 flex flex-col sm:flex-row gap-4 pt-4 w-full max-w-full box-border min-w-0">
             <button
               type="submit"
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-bold flex justify-center items-center gap-2 transition-colors shadow-lg"
+              className="flex-1 w-full max-w-full box-border bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-bold flex justify-center items-center gap-2 transition-colors shadow-lg"
             >
               <MessageCircle size={20} />
               Send via WhatsApp
@@ -104,7 +104,7 @@ export default function EnquirySection() {
             <button
               type="button"
               onClick={handleEmail}
-              className="flex-1 bg-navy-900 hover:bg-navy-800 text-white px-6 py-3 rounded-xl font-bold flex justify-center items-center gap-2 transition-colors shadow-lg"
+              className="flex-1 w-full max-w-full box-border bg-navy-900 hover:bg-navy-800 text-white px-6 py-3 rounded-xl font-bold flex justify-center items-center gap-2 transition-colors shadow-lg"
             >
               <Mail size={20} />
               Send via Email
