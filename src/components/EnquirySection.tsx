@@ -31,14 +31,40 @@ export default function EnquirySection() {
 
   const handleWhatsApp = (e: React.FormEvent) => {
     e.preventDefault();
-    const text = `Hello Zara Tours & Travels, I would like to enquire about a vehicle booking.%0a%0aName: ${formData.name}%0aTravel Date: ${formData.date}%0aPassengers: ${formData.passengers}%0aVehicle: ${formData.vehicle}%0aPickup: ${formData.pickup}%0aDestination: ${formData.destination}%0aMessage: ${formData.message}`;
-    window.open(`https://wa.me/918523923843?text=${text}`, "_blank");
+    const text = `Hello Zara Tours & Travels,
+
+New Enquiry:
+
+Name: ${formData.name}
+Phone: ${formData.phone}
+Travel Date: ${formData.date}
+Guests: ${formData.passengers}
+Pickup: ${formData.pickup}
+Destination: ${formData.destination}
+Vehicle/Service: ${formData.vehicle}
+Requirements: ${formData.message}
+
+Thank you.`;
+    window.open(`https://wa.me/918523923843?text=${encodeURIComponent(text)}`, "_blank");
   };
 
   const handleEmail = (e: React.FormEvent) => {
     e.preventDefault();
     const subject = `Booking Enquiry - ${formData.name}`;
-    const body = `Hello Zara Tours & Travels, I would like to enquire about a vehicle booking.\n\nName: ${formData.name}\nTravel Date: ${formData.date}\nPassengers: ${formData.passengers}\nVehicle: ${formData.vehicle}\nPickup: ${formData.pickup}\nDestination: ${formData.destination}\nMessage: ${formData.message}`;
+    const body = `Hello Zara Tours & Travels,
+
+New Enquiry:
+
+Name: ${formData.name}
+Phone: ${formData.phone}
+Travel Date: ${formData.date}
+Guests: ${formData.passengers}
+Pickup: ${formData.pickup}
+Destination: ${formData.destination}
+Vehicle/Service: ${formData.vehicle}
+Requirements: ${formData.message}
+
+Thank you.`;
     window.location.href = `mailto:Dhanushjr279@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
