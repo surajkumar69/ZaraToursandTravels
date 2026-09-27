@@ -74,23 +74,17 @@ export default function Contact() {
 
           {/* Map area */}
           <div className="bg-slate-200 rounded-3xl overflow-hidden shadow-inner h-[400px] lg:h-auto relative">
-            {/* Visual representation of a map */}
-            <div 
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: "url('/images/map.jpg')" }}
-            >
-              <div className="absolute inset-0 bg-navy-900/40 backdrop-blur-[2px]" />
-            </div>
-            
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="bg-white p-4 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
-                <MapPin className="text-gold-500" size={32} />
-                <div className="text-left">
-                  <p className="font-bold text-navy-900">Zara Tours & Travels</p>
-                  <p className="text-xs text-gray-500">Ketti, Ooty</p>
-                </div>
-              </div>
-            </div>
+            <iframe 
+              src="https://maps.google.com/maps?q=Bharathi%20Nagar,%20Ketti,%20Ooty,%20Tamil%20Nadu,%20India&t=&z=14&ie=UTF8&iwloc=&output=embed" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0, minHeight: '400px' }} 
+              allowFullScreen={false} 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade" 
+              className="absolute inset-0"
+              title="Zara Tours & Travels Location"
+            ></iframe>
           </div>
 
         </div>
