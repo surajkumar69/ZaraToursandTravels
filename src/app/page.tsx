@@ -10,6 +10,7 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import ExperienceBanner from "@/components/ExperienceBanner";
 import Gallery from "@/components/Gallery";
 import TrustSection from "@/components/TrustSection";
+import Reviews from "@/components/Reviews";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -28,6 +29,7 @@ export default function Home() {
       <ExperienceBanner />
       <Gallery />
       <TrustSection />
+      <Reviews />
       <Contact />
       <Footer />
     </main>
