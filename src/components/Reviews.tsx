@@ -30,6 +30,14 @@ export default function Reviews() {
 
   async function fetchReviews() {
     try {
+      // If the URL is missing or is the placeholder, we shouldn't attempt a real fetch
+      // because it will cause a CORS error / Failed to fetch in the browser.
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+      if (!url || url.includes('placeholder.supabase.co')) {
+        setReviews([]);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("reviews")
         .select("*")
@@ -38,8 +46,10 @@ export default function Reviews() {
 
       if (error) throw error;
       setReviews(data || []);
-    } catch (err) {
-      console.error("Error fetching reviews:", err);
+    } catch (err: any) {
+      console.error("Error fetching reviews:", err.message || err);
+      // Fail silently for read operations to avoid breaking the UI for regular visitors
+      setReviews([]); 
     } finally {
       setLoading(false);
     }
@@ -58,6 +68,11 @@ export default function Reviews() {
     }
 
     try {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+      if (!url || url.includes('placeholder.supabase.co')) {
+        throw new Error("Database connection is not configured correctly.");
+      }
+
       const { error } = await supabase
         .from("reviews")
         .insert([{ name, rating, text }]);
@@ -70,7 +85,13 @@ export default function Reviews() {
       setText("");
     } catch (err: any) {
       console.error("Error submitting review:", err);
-      setErrorMsg(err.message || "Failed to submit review. Please try again.");
+      // Display a more friendly message for network errors (Failed to fetch)
+      const errorText = err.message || "Failed to submit review. Please try again.";
+      if (errorText.includes("Failed to fetch") || errorText.includes("NetworkError")) {
+        setErrorMsg("Unable to connect to the server. Please check your internet connection or try again later.");
+      } else {
+        setErrorMsg(errorText);
+      }
     } finally {
       setSubmitting(false);
     }
