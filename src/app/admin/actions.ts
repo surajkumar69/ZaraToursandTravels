@@ -6,7 +6,6 @@ import { cookies } from "next/headers";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder-key";
-const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
 
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
@@ -16,6 +15,7 @@ export async function checkAuthAction() {
 }
 
 export async function loginAction(password: string) {
+  const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
   if (password === adminPassword) {
     cookies().set("admin_session", "true", { 
       httpOnly: true, 
