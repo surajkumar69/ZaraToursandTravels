@@ -40,7 +40,7 @@ export default function Reviews() {
 
       const pubKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';
       if (pubKey.includes('sb_secret_') || pubKey.includes('service_role')) {
-        console.error("Configuration Error: Vercel NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY contains a secret service role key.");
+        console.error("Configuration Error: Vercel NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY contains a secret service role key. Please use your sb_publishable_ key.");
         setReviews([]);
         return;
       }
@@ -83,7 +83,7 @@ export default function Reviews() {
       // Early detection of incorrect Vercel configuration
       const pubKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';
       if (pubKey.includes('sb_secret_') || pubKey.includes('service_role')) {
-        throw new Error("Configuration Error: You pasted a SECRET key into the PUBLIC publishable key field in Vercel. Please replace NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY with your anon/publishable JWT key.");
+        throw new Error("Configuration Error: You pasted a SECRET server key into the PUBLIC publishable key field in Vercel. Please use your valid sb_publishable_ key.");
       }
 
       const { error } = await supabase
