@@ -1,26 +1,80 @@
-import { Star, Quote } from "lucide-react";
+"use client";
+
+import { useState, useEffect } from "react";
+import { Star, Quote, Loader2, Send } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
+
+interface Review {
+  id: number;
+  name: string;
+  rating: number;
+  text: string;
+  created_at: string;
+}
 
 export default function Reviews() {
-  const reviews = [
-    {
-      name: "Rahul Sharma",
-      location: "Bangalore",
-      rating: 5,
-      text: "We booked a 14-seater Tempo Traveller for our family trip to Ooty. The vehicle was very clean, and the driver was extremely polite and knew all the local routes perfectly. Highly recommended!"
-    },
-    {
-      name: "Priya Nair",
-      location: "Kochi",
-      rating: 5,
-      text: "Excellent service by Zara Tours! We did the Coonoor sightseeing package. The rates were very transparent with no hidden charges, and we felt very safe throughout the journey."
-    },
-    {
-      name: "Amit Patel",
-      location: "Ahmedabad",
-      rating: 5,
-      text: "Very professional and punctual. The Innova we booked was in prime condition. They picked us up right on time from Coimbatore airport. Will definitely use their services again."
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Form state
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(5);
+  const [text, setText] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  async function fetchReviews() {
+    try {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("*")
+        .eq("approved", true)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setReviews(data || []);
+    } catch (err) {
+      console.error("Error fetching reviews:", err);
+    } finally {
+      setLoading(false);
     }
-  ];
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSubmitting(true);
+    setSuccessMsg("");
+    setErrorMsg("");
+
+    if (!name.trim() || !text.trim()) {
+      setErrorMsg("Please fill out all required fields.");
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("reviews")
+        .insert([{ name, rating, text }]);
+
+      if (error) throw error;
+
+      setSuccessMsg("Thank you! Your review has been submitted and is pending approval.");
+      setName("");
+      setRating(5);
+      setText("");
+    } catch (err: any) {
+      console.error("Error submitting review:", err);
+      setErrorMsg(err.message || "Failed to submit review. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <section id="reviews" className="py-20 bg-slate-50 text-navy-900 border-t border-gray-100">
@@ -32,27 +86,122 @@ export default function Reviews() {
           <p className="text-gray-600 max-w-2xl mx-auto">Don't just take our word for it. Read what travelers have to say about their journey with Zara Tours & Travels.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {reviews.map((review, idx) => (
-            <div key={idx} className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative hover:-translate-y-1 transition-transform duration-300">
-              <Quote className="absolute top-6 right-6 w-10 h-10 text-gold-500/20" />
-              
-              <div className="flex gap-1 mb-4">
-                {[...Array(review.rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-gold-500 text-gold-500" />
+        {loading ? (
+          <div className="flex justify-center py-10">
+            <Loader2 className="w-8 h-8 animate-spin text-gold-500" />
+          </div>
+        ) : reviews.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {reviews.map((review) => (
+              <div key={review.id} className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative hover:-translate-y-1 transition-transform duration-300 flex flex-col">
+                <Quote className="absolute top-6 right-6 w-10 h-10 text-gold-500/20" />
+                
+                <div className="flex gap-1 mb-4">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-gold-500 text-gold-500" />
+                  ))}
+                </div>
+                
+                <p className="text-gray-600 mb-6 italic leading-relaxed flex-grow">
+                  "{review.text}"
+                </p>
+                
+                <div className="mt-auto border-t border-gray-100 pt-4">
+                  <h3 className="font-bold text-lg">{review.name}</h3>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {new Date(review.created_at).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-10 text-gray-500 mb-16">
+            <p>No reviews yet. Be the first to leave a review!</p>
+          </div>
+        )}
+
+        {/* Review Submission Form */}
+        <div className="max-w-2xl mx-auto bg-white p-8 md:p-10 rounded-3xl shadow-lg border border-gray-100">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold mb-2">Leave a Review</h3>
+            <p className="text-gray-600 text-sm">We'd love to hear about your experience with us!</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {successMsg && (
+              <div className="p-4 bg-green-50 text-green-700 rounded-xl text-sm border border-green-200 text-center font-medium">
+                {successMsg}
+              </div>
+            )}
+            {errorMsg && (
+              <div className="p-4 bg-red-50 text-red-700 rounded-xl text-sm border border-red-200 text-center font-medium">
+                {errorMsg}
+              </div>
+            )}
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+              <input 
+                type="text" 
+                required 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900"
+                placeholder="John Doe"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setRating(star)}
+                    className="focus:outline-none transition-transform hover:scale-110"
+                  >
+                    <Star className={`w-8 h-8 ${rating >= star ? 'fill-gold-500 text-gold-500' : 'text-gray-300'}`} />
+                  </button>
                 ))}
               </div>
-              
-              <p className="text-gray-600 mb-6 italic leading-relaxed">
-                "{review.text}"
-              </p>
-              
-              <div className="mt-auto">
-                <h3 className="font-bold text-lg">{review.name}</h3>
-                <p className="text-sm text-gray-500">{review.location}</p>
-              </div>
             </div>
-          ))}
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Your Review</label>
+              <textarea 
+                required 
+                rows={4}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900 resize-none"
+                placeholder="Tell us about your trip..."
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full bg-gold-500 hover:bg-gold-600 text-white py-4 rounded-xl font-bold flex justify-center items-center gap-2 transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {submitting ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <Send className="w-5 h-5" />
+                  Submit Review
+                </>
+              )}
+            </button>
+          </form>
         </div>
 
       </div>
