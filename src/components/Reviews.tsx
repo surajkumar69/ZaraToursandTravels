@@ -53,7 +53,7 @@ export default function Reviews() {
       if (error) throw error;
       setReviews(data || []);
     } catch (err: any) {
-      console.error("Error fetching reviews:", err.message || err);
+      console.error(`Error fetching reviews from ${supabaseUrl}:`, err.message || err);
       // Fail silently for read operations to avoid breaking the UI for regular visitors
       setReviews([]); 
     } finally {
@@ -103,9 +103,9 @@ export default function Reviews() {
         errorText.includes("NetworkError") || 
         errorText.includes("Load failed")
       ) {
-        setErrorMsg("Unable to connect to the database. Please check your internet connection or URL configuration.");
+        setErrorMsg(`Unable to connect to the database (${errorText}). It failed to reach: ${supabaseUrl}. Please ensure this URL is correct and disable any Ad-Blockers (e.g. Brave Shields) that might block Supabase domains.`);
       } else {
-        setErrorMsg(errorText);
+        setErrorMsg(`Error: ${errorText}`);
       }
     } finally {
       setSubmitting(false);
