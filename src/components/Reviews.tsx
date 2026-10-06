@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Star, Quote, Loader2, Send } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase, supabaseUrl } from "@/lib/supabaseClient";
 
 interface Review {
   id: number;
@@ -32,8 +32,7 @@ export default function Reviews() {
     try {
       // If the URL is missing or is the placeholder, we shouldn't attempt a real fetch
       // because it will cause a CORS error / Failed to fetch in the browser.
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-      if (!url || url.includes('placeholder.supabase.co')) {
+      if (!supabaseUrl || supabaseUrl.includes('placeholder.supabase.co')) {
         setReviews([]);
         return;
       }
@@ -75,8 +74,7 @@ export default function Reviews() {
     }
 
     try {
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-      if (!url || url.includes('placeholder.supabase.co')) {
+      if (!supabaseUrl || supabaseUrl.includes('placeholder.supabase.co')) {
         throw new Error("Database connection is not configured correctly.");
       }
 
