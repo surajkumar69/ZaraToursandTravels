@@ -38,6 +38,13 @@ export default function Reviews() {
         return;
       }
 
+      const pubKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';
+      if (pubKey.includes('sb_secret_') || pubKey.includes('service_role')) {
+        console.error("Configuration Error: Vercel NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY contains a secret service role key.");
+        setReviews([]);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("reviews")
         .select("*")
@@ -73,6 +80,12 @@ export default function Reviews() {
         throw new Error("Database connection is not configured correctly.");
       }
 
+      // Early detection of incorrect Vercel configuration
+      const pubKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';
+      if (pubKey.includes('sb_secret_') || pubKey.includes('service_role')) {
+        throw new Error("Configuration Error: You pasted a SECRET key into the PUBLIC publishable key field in Vercel. Please replace NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY with your anon/publishable JWT key.");
+      }
+
       const { error } = await supabase
         .from("reviews")
         .insert([{ name, rating, text }]);
@@ -87,8 +100,12 @@ export default function Reviews() {
       console.error("Error submitting review:", err);
       // Display a more friendly message for network errors (Failed to fetch)
       const errorText = err.message || "Failed to submit review. Please try again.";
-      if (errorText.includes("Failed to fetch") || errorText.includes("NetworkError")) {
-        setErrorMsg("Unable to connect to the server. Please check your internet connection or try again later.");
+      if (
+        errorText.includes("Failed to fetch") || 
+        errorText.includes("NetworkError") || 
+        errorText.includes("Load failed")
+      ) {
+        setErrorMsg("Unable to connect to the database. Please check your internet connection or URL configuration.");
       } else {
         setErrorMsg(errorText);
       }
