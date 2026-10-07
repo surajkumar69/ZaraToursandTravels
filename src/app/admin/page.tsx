@@ -209,8 +209,8 @@ export default function AdminPage() {
                       </td>
                       <td className="p-4 font-medium whitespace-nowrap">{review.name}</td>
                       <td className="p-4 whitespace-nowrap">{review.rating} / 5</td>
-                      <td className="p-4 max-w-xs md:max-w-md truncate text-gray-600" title={review.text}>
-                        {review.text}
+                      <td className="p-4 max-w-xs md:max-w-md truncate text-gray-600" title={review.review}>
+                        {review.review}
                       </td>
                       <td className="p-4 text-xs text-gray-500 whitespace-nowrap">
                         {new Date(review.created_at).toLocaleDateString()}

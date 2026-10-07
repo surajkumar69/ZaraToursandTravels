@@ -8,7 +8,7 @@ interface Review {
   id: number;
   name: string;
   rating: number;
-  text: string;
+  review: string;
   created_at: string;
 }
 
@@ -19,7 +19,7 @@ export default function Reviews() {
   // Form state
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
-  const [text, setText] = useState("");
+  const [reviewText, setReviewText] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -67,7 +67,7 @@ export default function Reviews() {
     setSuccessMsg("");
     setErrorMsg("");
 
-    if (!name.trim() || !text.trim()) {
+    if (!name.trim() || !reviewText.trim()) {
       setErrorMsg("Please fill out all required fields.");
       setSubmitting(false);
       return;
@@ -86,14 +86,14 @@ export default function Reviews() {
 
       const { error } = await supabase
         .from("reviews")
-        .insert([{ name, rating, text }]);
+        .insert([{ name, rating, review: reviewText }]);
 
       if (error) throw error;
 
       setSuccessMsg("Thank you! Your review has been submitted and is pending approval.");
       setName("");
       setRating(5);
-      setText("");
+      setReviewText("");
     } catch (err: any) {
       console.error("Error submitting review:", err);
       // Display a more friendly message for network errors (Failed to fetch)
@@ -139,7 +139,7 @@ export default function Reviews() {
                 </div>
                 
                 <p className="text-gray-600 mb-6 italic leading-relaxed flex-grow">
-                  "{review.text}"
+                  "{review.review}"
                 </p>
                 
                 <div className="mt-auto border-t border-gray-100 pt-4">
@@ -213,8 +213,8 @@ export default function Reviews() {
               <textarea 
                 required 
                 rows={4}
-                value={text}
-                onChange={(e) => setText(e.target.value)}
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none text-navy-900 resize-none"
                 placeholder="Tell us about your trip..."
               ></textarea>
