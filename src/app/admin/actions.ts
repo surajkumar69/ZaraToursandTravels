@@ -51,7 +51,7 @@ export async function fetchAllReviewsAction() {
   return data;
 }
 
-export async function approveReviewAction(id: number) {
+export async function approveReviewAction(id: string) {
   requireAuth();
   const { error } = await supabaseAdmin
     .from("reviews")
@@ -63,7 +63,7 @@ export async function approveReviewAction(id: number) {
   revalidatePath("/admin");
 }
 
-export async function deleteReviewAction(id: number) {
+export async function deleteReviewAction(id: string) {
   requireAuth();
   const { error } = await supabaseAdmin
     .from("reviews")

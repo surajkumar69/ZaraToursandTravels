@@ -5,7 +5,7 @@ import { Star, Quote, Loader2, Send } from "lucide-react";
 import { supabase, supabaseUrl } from "@/lib/supabaseClient";
 
 interface Review {
-  id: number;
+  id: string;
   name: string;
   rating: number;
   review: string;
@@ -86,7 +86,13 @@ export default function Reviews() {
 
       const { error } = await supabase
         .from("reviews")
-        .insert([{ name, rating, review: reviewText }]);
+        .insert([{ 
+          name, 
+          rating, 
+          review: reviewText, 
+          approved: false, 
+          created_at: new Date().toISOString() 
+        }]);
 
       if (error) throw error;
 

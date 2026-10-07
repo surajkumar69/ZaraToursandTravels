@@ -75,7 +75,7 @@ export default function AdminPage() {
     }
   }
 
-  async function approveReview(id: number) {
+  async function approveReview(id: string) {
     try {
       await approveReviewAction(id);
       fetchReviews();
@@ -85,7 +85,7 @@ export default function AdminPage() {
     }
   }
 
-  async function deleteReview(id: number) {
+  async function deleteReview(id: string) {
     if (!confirm("Are you sure you want to permanently delete this review?")) return;
     try {
       await deleteReviewAction(id);
