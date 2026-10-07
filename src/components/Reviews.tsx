@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Star, Quote, Loader2, Send } from "lucide-react";
 import { supabase, supabaseUrl } from "@/lib/supabaseClient";
+import { submitReviewAction } from "@/app/actions";
 
 interface Review {
   id: string;
@@ -84,25 +85,19 @@ export default function Reviews() {
         throw new Error("Configuration Error: You pasted a SECRET server key into the PUBLIC publishable key field in Vercel. Please use your valid sb_publishable_ key.");
       }
 
-      const { error } = await supabase
-        .from("reviews")
-        .insert([{ 
-          name, 
-          rating, 
-          review: reviewText, 
-          approved: false, 
-          created_at: new Date().toISOString() 
-        }]);
+      // Submit via Server Action to bypass RLS and securely auto-approve
+      await submitReviewAction(name, rating, reviewText);
 
-      if (error) throw error;
-
-      setSuccessMsg("Thank you! Your review has been submitted and is pending approval.");
+      setSuccessMsg("Thank you! Your review has been submitted and is now public.");
       setName("");
       setRating(5);
       setReviewText("");
+      
+      // Instantly refresh the UI to show the newly approved review
+      fetchReviews();
     } catch (err: any) {
       console.error("Error submitting review:", err);
-      // Display a more friendly message for network errors (Failed to fetch)
+      // Display a more friendly message for network errors
       const errorText = err.message || "Failed to submit review. Please try again.";
       if (
         errorText.includes("Failed to fetch") || 
