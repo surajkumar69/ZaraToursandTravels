@@ -16,22 +16,27 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-navy-900 text-white flex flex-col">
+    <div className="min-h-screen bg-ivory-100 text-charcoal-900 flex flex-col">
+      <a href="#main-content" className="skip-link visually-hidden">
+        Skip to main content
+      </a>
       <Navbar />
-      <Hero />
-      <EnquirySection />
-      <AboutUs />
-      <Fleet />
-      <Services />
-      <Destinations />
-      <OotySpecial />
-      <WhyChooseUs />
-      <ExperienceBanner />
-      <Gallery />
-      <TrustSection />
-      <Reviews />
-      <Contact />
+      <main id="main-content" className="flex-1 flex flex-col">
+        <Hero />
+        <EnquirySection />
+        <AboutUs />
+        <Fleet />
+        <Services />
+        <Destinations />
+        <OotySpecial />
+        <WhyChooseUs />
+        <ExperienceBanner />
+        <Gallery />
+        <TrustSection />
+        <Reviews />
+        <Contact />
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }

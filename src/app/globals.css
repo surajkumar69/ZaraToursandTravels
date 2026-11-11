@@ -2,17 +2,214 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-forest-950: #071610;
+  --color-forest-900: #0e2920;
+  --color-forest-800: #163b2e;
+  --color-ivory-50: #fcfbf8;
+  --color-ivory-100: #f6f2e9;
+  --color-champagne-400: #d4b46e;
+  --color-champagne-500: #b89347;
+  --color-charcoal-900: #1a1d1b;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-ivory-100);
+    color: var(--color-charcoal-900);
+    line-height: 1.5;
+    text-align: start;
+  }
+
+  /* High-contrast accessible focus indicator */
+  :where(a:any-link, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid #b89347;
+    outline-offset: 3px;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+/* Visually hidden utility (accessible to screen readers; focusable skip-links become visible) */
+.visually-hidden:where(:not(:focus-within, :active)) {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
 }
 
-body {
-  background-color: #0f172a;
-  color: #f8fafc;
+.skip-link:focus-visible {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 200;
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  background-color: #0e2920;
+  color: #fcfbf8;
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: 0 10px 25px rgba(7, 22, 16, 0.35);
+}
+
+/* Form validation feedback after user interaction (:user-invalid + JS fallback class) */
+.field-input:user-invalid,
+.field-input.user-invalid-fallback {
+  border-color: #b91c1c;
+  background-color: #fef2f2;
+}
+
+.field-error {
+  display: none;
+  color: #b91c1c;
+  font-size: 0.875rem;
+  margin-top: 0.375rem;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.field-input:user-invalid + .field-error,
+.field-input.user-invalid-fallback + .field-error {
+  display: flex;
+}
+
+/* Native Modal Dialog (Lightbox & Mobile Drawer) — scroll containment & top-layer transitions */
+dialog.luxury-dialog {
+  opacity: 0;
+  transform: scale(0.96);
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 0.28s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-behavior: allow-discrete;
+}
+
+dialog.luxury-dialog[open]:where(:not([data-closing])) {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@starting-style {
+  dialog.luxury-dialog[open]:where(:not([data-closing])) {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+dialog.luxury-dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog.luxury-dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgba(7, 22, 16, 0);
+  backdrop-filter: blur(0px);
+  transition-property: background-color, backdrop-filter, display, overlay;
+  transition-duration: 0.28s;
+  transition-timing-function: ease-out;
+  transition-behavior: allow-discrete;
+}
+
+dialog.luxury-dialog[open]:where(:not([data-closing]))::backdrop {
+  background-color: rgba(7, 22, 16, 0.88);
+  backdrop-filter: blur(8px);
+}
+
+@starting-style {
+  dialog.luxury-dialog[open]:where(:not([data-closing]))::backdrop {
+    background-color: rgba(7, 22, 16, 0);
+    backdrop-filter: blur(0px);
+  }
+}
+
+/* Mobile Slide-over Drawer */
+dialog.mobile-drawer {
+  opacity: 0;
+  transform: translateX(100%);
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-behavior: allow-discrete;
+}
+
+dialog.mobile-drawer[open]:where(:not([data-closing])) {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@starting-style {
+  dialog.mobile-drawer[open]:where(:not([data-closing])) {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+dialog.mobile-drawer:modal {
+  overscroll-behavior: contain;
+}
+
+dialog.mobile-drawer::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgba(7, 22, 16, 0);
+  backdrop-filter: blur(0px);
+  transition-property: background-color, backdrop-filter, display, overlay;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
+  transition-behavior: allow-discrete;
+}
+
+dialog.mobile-drawer[open]:where(:not([data-closing]))::backdrop {
+  background-color: rgba(7, 22, 16, 0.72);
+  backdrop-filter: blur(4px);
+}
+
+@starting-style {
+  dialog.mobile-drawer[open]:where(:not([data-closing]))::backdrop {
+    background-color: rgba(7, 22, 16, 0);
+    backdrop-filter: blur(0px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.luxury-dialog,
+  dialog.mobile-drawer {
+    transform: none;
+    transition-duration: 0.1s;
+  }
+  dialog.luxury-dialog::backdrop,
+  dialog.mobile-drawer::backdrop {
+    transition-duration: 0.1s;
+  }
+}
+
+@media (forced-colors: active) {
+  .luxury-card,
+  .field-input {
+    border: 1px solid CanvasText;
+  }
 }
