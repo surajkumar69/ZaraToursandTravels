@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Plus_Jakarta_Sans } from "next/font/google";
+import FakeServerErrorPage from "@/components/FakeServerErrorPage";
+import { isDemoErrorPageActive } from "@/config/demoError";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -17,7 +19,7 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-export const metadata: Metadata = {
+const siteMetadata: Metadata = {
   title: "Zara Tours & Travels | Luxury Ooty & Nilgiris Travel Experiences",
   description:
     "Reliable travel services and comfortable vehicles for sightseeing, family trips, group tours and outstation journeys in Ooty, Tamil Nadu.",
@@ -41,11 +43,36 @@ export const metadata: Metadata = {
   },
 };
 
+export const metadata: Metadata = isDemoErrorPageActive()
+  ? {
+      title: "500 – Internal Server Error",
+      description: "Something went wrong while loading this page.",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    }
+  : siteMetadata;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (isDemoErrorPageActive()) {
+    return (
+      <html
+        lang="en"
+        className={jakarta.variable}
+        style={{ colorScheme: "only dark", backgroundColor: "#07090e" }}
+      >
+        <body className="font-sans bg-[#07090e] text-zinc-100 antialiased">
+          <FakeServerErrorPage />
+        </body>
+      </html>
+    );
+  }
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "TravelAgency",
